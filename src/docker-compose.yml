@@ -1,0 +1,38 @@
+#version: '3'
+#services:
+ # rails:
+  #  image: nginx
+  #nginx:
+   # build: .
+    #ports:
+     # - "8080:8080"
+    #depends_on:
+    #  - rails
+version: '3'
+
+
+
+services:
+  db:
+    image: mysql
+    volumes:
+      - db_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+  
+  rails:
+   build: .   
+  nginx:
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - rails
+    volumes:
+      - nginx_config:/etc/nginx/nginx_config.d
+volumes:
+  db_data:
+  nginx_config:
+
+
+
