@@ -1,0 +1,34 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+int main() {
+    int n; // size of original grid
+    cin >> n;
+
+    vector<int> grid(n * n);
+    for (int i = 0; i < n * n; i++) {
+        cin >> grid[i];
+    }
+
+    int k; // size of sub-grid
+    cin >> k;
+
+    int max_sum = -1;
+    for (int i = 0; i <= n - k; i++) {
+        for (int j = 0; j <= n - k; j++) {
+            int sum = 0;
+            for (int p = i; p < i + k; p++) {
+                for (int q = j; q < j + k; q++) {
+                    sum += grid[p * n + q];
+                }
+            }
+            max_sum = max(max_sum, sum);
+        }
+    }
+
+    cout << max_sum << endl;
+
+    return 0;
+}

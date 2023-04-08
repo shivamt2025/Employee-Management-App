@@ -1,0 +1,60 @@
+# version: '3'
+#services:
+ # rails:
+  #  image: nginx
+  #nginx:
+   # build: .
+    #ports:
+     # - "8080:8080"
+    #depends_on:
+    #- rails  
+version: "3"
+
+services:
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: mydatabase
+
+  web:
+    build: .
+    command: bundle exec rails server -p 3000 -b '0.0.0.0'
+    environment:
+      DATABASE_URL: postgres://myuser:mypassword@db/mydatabase
+    depends_on:
+      - db
+    ports:
+      - "3000"
+
+  web2:
+    build: .
+    command: bundle exec rails server -p 3000 -b '0.0.0.0'
+    environment:
+      DATABASE_URL: postgres://myuser:mypassword@db/mydatabase
+    depends_on:
+      - db
+    ports:
+      - "3001"
+
+  web3:
+    build: .
+    command: bundle exec rails server -p 3000 -b '0.0.0.0'
+    environment:
+      DATABASE_URL: postgres://myuser:mypassword@db/mydatabase
+    depends_on:
+      - db
+    ports:
+      - "3002"
+
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./nginx.config:/etc/nginx/nginx.config
+    ports:
+      - "8080:80"
+    depends_on:
+      - web
+      - web2
+      - web3
