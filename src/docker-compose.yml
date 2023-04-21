@@ -1,0 +1,28 @@
+version: '3'
+services:
+  web:
+    build: .
+    ports:
+      - "8080:8080" # Expose port 8080 on the host machine
+    depends_on:
+      - db # Declare dependency on the db service
+    environment:
+      - DATABASE_HOST=db_container # Set database host to the hostname or container name of the db service
+      - DATABASE_PASSWORD=<%= ENV["SRC_DATABASE_PASSWORD"] %> # Set database password from environment variable
+    networks:
+      - my_network # Connect to my_network
+
+  db:
+    image: mysql
+    volumes:
+      - db-data:/var/lib/mysql # Mount volume for persistent data
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=true # Set empty password for convenience
+    networks:
+      - my_network # Connect to my_network
+
+networks:
+  my_network: # Define my_network for internal communication
+
+volumes:
+  db-data: # Define named volume for database data
